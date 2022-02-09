@@ -1,3 +1,13 @@
+# Lit-Html Cart Proof of Concept
+
+- Use yarn rather than npm as shown in LitElement JavaScript starter
+ docs below.
+- Install packages using `yarn install`
+- Then Run server using `yarn serve`
+
+- Html file is in the `/dev` with the lit components in the `/components` directory.
+
+
 # LitElement JavaScript starter
 
 This project includes a sample component using LitElement with JavaScript.
