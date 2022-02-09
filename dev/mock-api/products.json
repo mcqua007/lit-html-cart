@@ -1,0 +1,30 @@
+[
+  {
+    "id": 1,
+    "title": "Nike Shorts",
+    "price": 150,
+    "color": "grey",
+    "image": "https://static.nike.com/a/images/c_limit,w_592,f_auto/t_product_v1/i1-6c19a4a0-9d68-4764-a296-0901ba4f42c0/flex-stride-mens-7-brief-running-shorts-BvCXmh.png"
+  },
+  {
+    "id": 2,
+    "title": "Nike Sweat Pants",
+    "price": 20,
+    "color": "red",
+    "image": "https://static.nike.com/a/images/c_limit,w_592,f_auto/t_product_v1/9746c75c-cf76-4030-acb0-bbba2261e039/sportswear-tech-fleece-mens-joggers-4x29ft.png"
+  },
+  {
+    "id": 3,
+    "title": "Nike SB Shoes",
+    "price": 80,
+    "color": "red",
+    "image": "https://static.nike.com/a/images/c_limit,w_592,f_auto/t_product_v1/098895bd-6987-4814-b58c-ca136549a317/sb-blzr-court-mid-premium-skate-shoes-rnDqF6.png"
+  },
+  {
+    "id": 4,
+    "title": "Nike Hoodie",
+    "price": 50,
+    "color": "black",
+    "image": "https://static.nike.com/a/images/c_limit,w_592,f_auto/t_product_v1/c4a9db29-e3d6-4491-9d84-698fe551bb61/sportswear-sport-essentials-mens-high-pile-fleece-pullover-hoodie-R9g13W.png"
+  }
+]
