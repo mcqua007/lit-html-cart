@@ -25,7 +25,7 @@ export class CartDrawer extends LitElement {
         transition: transform 0.35s ease-in-out;
       }
 
-      .cart-slider[aria-hidden='true'] {
+      .cart-slider[aria-hidden='false'] {
         transform: none;
       }
 
@@ -149,13 +149,13 @@ export class CartDrawer extends LitElement {
     count: {type: Number},
     product: {type: Object},
     cartItems: {type: Array},
-    open: {type: Boolean},
+    hide: {type: Boolean},
   };
 
   constructor() {
     super();
     this.count = 0;
-    this.open = false;
+    this.hide = true;
     this.cartItems = [];
 
     window.MicroBus.on('cart-change', async (e) => {
@@ -171,7 +171,7 @@ export class CartDrawer extends LitElement {
     });
 
     window.MicroBus.on('cart-sidebar-toggle', () => {
-      this.open = !this.open;
+      this.hide = !this.hide;
       window.MicroBus.emit('body-overlay-toggle');
     });
   }
@@ -223,16 +223,11 @@ export class CartDrawer extends LitElement {
   }
   render() {
     return html`
-      <div class="cart-slider" aria-hidden=${this.open}>
+      <div class="cart-slider" aria-hidden=${this.hide}>
         <header>
           <h4>My Bag (<cart-count></cart-count> items)</h4>
           <button class="close-cart-btn" @click=${this._closeCart}>
-            <img
-              src="//cdn.shopify.com/s/files/1/0365/7037/t/11/assets/icon-times.svg"
-              width='26"'
-              height="26"
-              style="26px;"
-            />
+            <img src="icons/times.svg" width="28" height="28" />
           </button>
         </header>
         <div class="cart-slider_products">${this.buildCartItems()}</div>
