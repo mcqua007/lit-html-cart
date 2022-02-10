@@ -165,13 +165,14 @@ export class CartDrawer extends LitElement {
           this.cartItems.push(data);
           this.count = this.count + 1;
           window.MicroBus.emit('count-change', {count: this.count});
-          this.open = true;
+          window.MicroBus.emit('cart-sidebar-toggle');
         });
       }
     });
 
     window.MicroBus.on('cart-sidebar-toggle', () => {
       this.open = !this.open;
+      window.MicroBus.emit('body-overlay-toggle');
     });
   }
 
@@ -252,7 +253,7 @@ export class CartDrawer extends LitElement {
   }
 
   _closeCart() {
-    this.open = false;
+    window.MicroBus.emit('cart-sidebar-toggle');
   }
 }
 
