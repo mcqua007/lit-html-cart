@@ -5,10 +5,32 @@ export class CartDrawer extends LitElement {
   static get styles() {
     return css`
       :host {
-        display: block;
-        border: solid 1px gray;
-        padding: 16px;
-        max-width: 500px;
+      }
+
+      .cart-slider {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        max-width: 430px;
+        width: 100%;
+        position: fixed;
+        right: 0;
+        top: 0;
+        background: #fff;
+        z-index: 2;
+        box-shadow: 1px 0px 20px -5px #bfbfbf;
+        height: 100%;
+        padding: 16px 0;
+        transform: translateX(105%);
+        transition: transform 0.35s ease-in-out;
+      }
+
+      .cart-slider[aria-hidden='true'] {
+        transform: none;
+      }
+
+      button {
+        cursor: pointer;
       }
 
       .flex {
@@ -48,6 +70,70 @@ export class CartDrawer extends LitElement {
       .margin-b-xs {
         margin-bottom: 6px;
       }
+
+      .cart-slider .cart-slider_top {
+        border-bottom: 1px solid #eee;
+        padding-bottom: 16px;
+      }
+
+      .cart-slider header {
+        display: flex;
+        border-bottom: 1px solid #eee;
+        padding: 0 16px 16px 16px;
+        align-items: center;
+      }
+
+      .cart-slider header h4 {
+        margin: 0 auto;
+        text-align: center;
+      }
+
+      .cart-slider .cart-slider_products {
+        height: 100%;
+        margin-top: 10px;
+        overflow-y: auto;
+        padding: 0 10px 10px 10px;
+      }
+
+      .cart-slider_bottom {
+        height: 100%;
+        max-height: 80px;
+        display: flex;
+        padding: 0 10px;
+        border-top: 1px solid rgb(238, 238, 238);
+      }
+
+      .checkout-btn {
+        display: flex;
+        background: #2a2b2c;
+        border: none;
+        width: 100%;
+        color: #fff;
+        justify-content: center;
+        align-items: center;
+        padding: 10px;
+        margin: 10px 0;
+        font-size: 18px;
+        font-weight: 500;
+        cursor: pointer;
+        height: 45px;
+        border-radius: 5px;
+      }
+
+      .close-cart-btn {
+        background: none;
+        border: none;
+        padding: 0;
+        cursor: pointer;
+      }
+
+      .empty-cart-text {
+        margin: auto 0;
+        display: flex;
+        justify-content: center;
+        height: 100%;
+        align-items: center;
+      }
     `;
   }
 
@@ -56,11 +142,13 @@ export class CartDrawer extends LitElement {
     count: {type: Number},
     product: {type: Object},
     cartItems: {type: Array},
+    open: {type: Boolean},
   };
 
   constructor() {
     super();
     this.count = 0;
+    this.open = false;
     this.cartItems = [];
 
     window.MicroBus.on('cart-change', async (e) => {
@@ -72,6 +160,10 @@ export class CartDrawer extends LitElement {
           console.log('Cart Items: ', this.cartItems);
         });
       }
+    });
+
+    window.MicroBus.on('cart-sidebar-toggle', () => {
+      this.open = !this.open;
     });
   }
 
@@ -112,14 +204,31 @@ export class CartDrawer extends LitElement {
         })}
       `;
     } else {
-      return html` <p>Your cart is currently empty!</p> `;
+      return html`
+        <p class="empty-cart-text">Your cart is currently empty!</p>
+      `;
     }
   }
   render() {
-    return html` <div>
-      <h4>Cart (${this.count} Items)</h4>
-      <div class="cart-container">${this.buildCartItems()}</div>
-    </div>`;
+    return html`
+      <div class="cart-slider" aria-hidden=${this.open}>
+        <header>
+          <h4>My Bag (${this.count} items)</h4>
+          <button class="close-cart-btn" @click=${this._closeCart}>
+            <img
+              src="//cdn.shopify.com/s/files/1/0365/7037/t/11/assets/icon-times.svg"
+              width='26"'
+              height="26"
+              style="26px;"
+            />
+          </button>
+        </header>
+        <div class="cart-slider_products">${this.buildCartItems()}</div>
+        <div class="cart-slider_bottom">
+          <button class="checkout-btn">Checkout</button>
+        </div>
+      </div>
+    `;
   }
 
   _removeItem(id) {
@@ -129,6 +238,10 @@ export class CartDrawer extends LitElement {
     this.cartItems = arr;
     this.count--;
     window.MicroBus.emit('cart-change', {count: this.count});
+  }
+
+  _closeCart() {
+    this.open = false;
   }
 }
 
