@@ -134,6 +134,13 @@ export class CartDrawer extends LitElement {
         height: 100%;
         align-items: center;
       }
+
+      .remove-btn {
+        background: none;
+        border: 1px solid #aaa;
+        color: #aaa;
+        line-height: 1;
+      }
     `;
   }
 
@@ -193,7 +200,10 @@ export class CartDrawer extends LitElement {
                 </div>
                 <div class="margin-b-xs flex _jc-space-between">
                   <div class="cart-item_variant">${item.color}</div>
-                  <button @click=${() => this._removeItem(item.id)}>
+                  <button
+                    class="remove-btn"
+                    @click=${() => this._removeItem(item.id)}
+                  >
                     remove
                   </button>
                   <!-- <cart-remove-btn .pid=${item.id}></cart-remove-btn> -->
