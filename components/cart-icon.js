@@ -22,26 +22,16 @@ export class CartIcon extends LitElement {
     `,
   ];
 
-  static properties = {
-    count: {type: Number},
-  };
-
   constructor() {
     super();
-    this.count = 0;
-
-    window.MicroBus.on('cart-change', (e) => {
-      console.log('Cart Icon - Cart changed', e);
-      this.count = e.detail.count;
-    });
-
-    window.MicroBus.on('cart-count-changed', (e) => {
-      this.count = e.detail.count;
-    });
   }
 
   render() {
-    return html`<button @click=${this._onClick}>${this.count}</button>`;
+    return html`
+      <button @click=${this._onClick}>
+        <cart-count></cart-count>
+      </button>
+    `;
   }
 
   _onClick(e) {

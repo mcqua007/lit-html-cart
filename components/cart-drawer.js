@@ -163,8 +163,9 @@ export class CartDrawer extends LitElement {
       if (e.detail.id) {
         this.getProductData(e.detail.id).then((data) => {
           this.cartItems.push(data);
-          this.count = e.detail.count;
-          console.log('Cart Items: ', this.cartItems);
+          this.count = this.count + 1;
+          window.MicroBus.emit('count-change', {count: this.count});
+          this.open = true;
         });
       }
     });
@@ -223,7 +224,7 @@ export class CartDrawer extends LitElement {
     return html`
       <div class="cart-slider" aria-hidden=${this.open}>
         <header>
-          <h4>My Bag (${this.count} items)</h4>
+          <h4>My Bag (<cart-count></cart-count> items)</h4>
           <button class="close-cart-btn" @click=${this._closeCart}>
             <img
               src="//cdn.shopify.com/s/files/1/0365/7037/t/11/assets/icon-times.svg"
@@ -246,8 +247,8 @@ export class CartDrawer extends LitElement {
     let arr = [...this.cartItems];
     arr.splice(index, 1);
     this.cartItems = arr;
-    this.count--;
-    window.MicroBus.emit('cart-change', {count: this.count});
+    this.count = this.count - 1;
+    window.MicroBus.emit('count-change', {count: this.count});
   }
 
   _closeCart() {
