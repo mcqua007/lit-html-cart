@@ -34,9 +34,8 @@ export class CartIcon extends LitElement {
     `;
   }
 
-  _onClick(e) {
-    console.log('Click: ', e);
-    window.MicroBus.emit('cart-sidebar-toggle', {});
+  _onClick() {
+    window.MicroBus.emit('cart-sidebar-toggle');
   }
 }
 
