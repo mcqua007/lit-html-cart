@@ -29,16 +29,20 @@ export class MenuDrawer extends LitElement {
 
   render() {
     return html`
-      <h4>Menu</h4>
-      <nav>
-        <ul>
-          <li>Home</li>
-          <li>Collection</li>
-          <li>About</li>
-          <li>Cart</li>
-          <li>Contact Us</li>
-        </ul>
-      </nav>
+      <side-drawer>
+        <div class="menu">
+          <h4>Menu</h4>
+          <nav>
+            <ul>
+              <li>Home</li>
+              <li>Collection</li>
+              <li>About</li>
+              <li>Cart</li>
+              <li>Contact Us</li>
+            </ul>
+          </nav>
+        </div>
+      </side-drawer>
     `;
   }
 }

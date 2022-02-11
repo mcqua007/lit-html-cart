@@ -56,7 +56,6 @@ export class SideDrawer extends LitElement {
     this.child = null;
     this.position = this.position ? this.position : 'left';
     window.MicroBus.on('side-drawer-toggle', (e) => {
-      this.child = e.detail.el;
       this._toggleHide(e);
     });
   }
@@ -67,20 +66,9 @@ export class SideDrawer extends LitElement {
         <button class="close-btn" @click=${this._toggleHide}>
           <img src="icons/times.svg" width="28" height="28" />
         </button>
-        ${this._renderChild()}
+        <slot></slot>
       </div>
     `;
-  }
-
-  _renderChild() {
-    switch (this.child) {
-      case 'menu':
-        return html`<menu-drawer></menu-drawer>`;
-      case 'cart':
-        return html`<cart-drawer></cart-drawer>`;
-      default:
-        return html`<slot></slot>`;
-    }
   }
 
   _toggleHide(e) {

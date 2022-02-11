@@ -206,15 +206,17 @@ export class CartDrawer extends LitElement {
   }
   render() {
     return html`
-      <div class="cart-slider" aria-hidden=${this.hide}>
-        <header>
-          <h4>My Bag (<cart-count></cart-count> items)</h4>
-        </header>
-        <div class="cart-slider_products">${this.buildCartItems()}</div>
-        <div class="cart-slider_bottom">
-          <button class="checkout-btn">Checkout</button>
+      <side-drawer position="right">
+        <div class="cart-slider">
+          <header>
+            <h4>My Bag (<cart-count></cart-count> items)</h4>
+          </header>
+          <div class="cart-slider_products">${this.buildCartItems()}</div>
+          <div class="cart-slider_bottom">
+            <button class="checkout-btn">Checkout</button>
+          </div>
         </div>
-      </div>
+      </side-drawer>
     `;
   }
 

@@ -39,7 +39,7 @@ export class CartIcon extends LitElement {
   }
 
   _onClick() {
-    window.MicroBus.emit('side-drawer-toggle', {el: this.el});
+    window.MicroBus.emit('cart-icon-click', {el: this.el});
   }
 }
 
