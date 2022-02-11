@@ -85,9 +85,6 @@ export class CartDrawer extends LitElement {
       }
 
       .cart-slider_bottom {
-        height: 100%;
-        max-height: 95px;
-        display: flex;
         padding: 0 10px;
         border-top: 1px solid rgb(238, 238, 238);
       }
@@ -146,6 +143,7 @@ export class CartDrawer extends LitElement {
     this.count = 0;
     this.hide = true;
     this.cartItems = [];
+    this.subtotal = 0;
 
     window.MicroBus.on('cart-change', async (e) => {
       console.log('event: ', e);
@@ -153,10 +151,22 @@ export class CartDrawer extends LitElement {
         this.getProductData(e.detail.id).then((data) => {
           this.cartItems.push(data);
           this.count = this.count + 1;
+          this.calcSubtotal();
+
           window.MicroBus.emit('count-change', {count: this.count});
         });
       }
     });
+  }
+
+  calcSubtotal() {
+    // this.subtotal = this.cartItems.reduce((a, b) => ({x: a.x + b.x}));
+    var temp = 0;
+    this.cartItems.forEach((i) => {
+      temp += i.price;
+    });
+    console.log(this.subtotal, temp);
+    this.subtotal = temp.toFixed(2);
   }
 
   //mock api call to get product data
@@ -206,13 +216,18 @@ export class CartDrawer extends LitElement {
   }
   render() {
     return html`
-      <side-drawer position="right">
+      <side-drawer position="right" .toggle=${this.sidedrawer}>
         <div class="cart-slider">
           <header>
             <h4>My Bag (<cart-count></cart-count> items)</h4>
           </header>
           <div class="cart-slider_products">${this.buildCartItems()}</div>
+
           <div class="cart-slider_bottom">
+            <div class="flex _jc-space-between" style="margin-top: 10px;">
+              <div>Subtotal</div>
+              <div>$${this.subtotal}</div>
+            </div>
             <button class="checkout-btn">Checkout</button>
           </div>
         </div>
@@ -226,6 +241,7 @@ export class CartDrawer extends LitElement {
     arr.splice(index, 1);
     this.cartItems = arr;
     this.count = this.count - 1;
+    this.calcSubtotal();
     window.MicroBus.emit('count-change', {count: this.count});
   }
 }
