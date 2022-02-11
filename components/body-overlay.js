@@ -45,7 +45,7 @@ export class BodyOverlay extends LitElement {
   }
 
   _onclick() {
-    window.MicroBus.emit('cart-sidebar-toggle');
+    window.MicroBus.emit('side-drawer-toggle', {el: this.el});
   }
 }
 customElements.define('body-overlay', BodyOverlay);

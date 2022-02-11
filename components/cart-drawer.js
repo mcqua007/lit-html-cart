@@ -5,28 +5,17 @@ export class CartDrawer extends LitElement {
   static get styles() {
     return css`
       :host {
+        width: 100%;
+        height: 100%;
       }
 
       .cart-slider {
         display: flex;
         flex-direction: column;
         justify-content: space-between;
-        max-width: 430px;
         width: 100%;
-        position: fixed;
-        right: 0;
-        top: 0;
-        background: #fff;
-        z-index: 2;
-        box-shadow: 1px 0px 20px -5px #bfbfbf;
         height: 100%;
         padding: 16px 0;
-        transform: translateX(105%);
-        transition: transform 0.35s ease-in-out;
-      }
-
-      .cart-slider[aria-hidden='false'] {
-        transform: none;
       }
 
       button {
@@ -97,7 +86,7 @@ export class CartDrawer extends LitElement {
 
       .cart-slider_bottom {
         height: 100%;
-        max-height: 80px;
+        max-height: 95px;
         display: flex;
         padding: 0 10px;
         border-top: 1px solid rgb(238, 238, 238);
@@ -165,14 +154,8 @@ export class CartDrawer extends LitElement {
           this.cartItems.push(data);
           this.count = this.count + 1;
           window.MicroBus.emit('count-change', {count: this.count});
-          window.MicroBus.emit('cart-sidebar-toggle');
         });
       }
-    });
-
-    window.MicroBus.on('cart-sidebar-toggle', () => {
-      this.hide = !this.hide;
-      window.MicroBus.emit('body-overlay-toggle');
     });
   }
 
@@ -226,9 +209,6 @@ export class CartDrawer extends LitElement {
       <div class="cart-slider" aria-hidden=${this.hide}>
         <header>
           <h4>My Bag (<cart-count></cart-count> items)</h4>
-          <button class="close-cart-btn" @click=${this._closeCart}>
-            <img src="icons/times.svg" width="28" height="28" />
-          </button>
         </header>
         <div class="cart-slider_products">${this.buildCartItems()}</div>
         <div class="cart-slider_bottom">
@@ -245,10 +225,6 @@ export class CartDrawer extends LitElement {
     this.cartItems = arr;
     this.count = this.count - 1;
     window.MicroBus.emit('count-change', {count: this.count});
-  }
-
-  _closeCart() {
-    window.MicroBus.emit('cart-sidebar-toggle');
   }
 }
 

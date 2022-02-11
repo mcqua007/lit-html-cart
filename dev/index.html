@@ -21,15 +21,17 @@
   <script type="module" src="../components/cart-icon.js"></script>
   <script type="module" src="../components/cart-count.js"></script>
   <script type="module" src="../components/body-overlay.js"></script>
+  <script type="module" src="../components/menu-drawer.js"></script>
+  <script type="module" src="../components/side-drawer.js"></script>
+  <script type="module" src="../components/menu-btn.js"></script>
 </head>
 
 <body>
-  <body-overlay></body-overlay>
-  <cart-drawer></cart-drawer>
+  <side-drawer position="right"></side-drawer>
   <header class="top-bar">
-    <i class="menu las la-bars"></i>
+    <menu-btn el="menu"><i class="menu las la-bars"></i></menu-btn>
     <div class="logo">Fake</div>
-    <cart-icon></cart-icon>
+    <cart-icon el="cart"></cart-icon>
   </header>
   <main>
     <div class="product-grid">

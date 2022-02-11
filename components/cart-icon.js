@@ -22,6 +22,10 @@ export class CartIcon extends LitElement {
     `,
   ];
 
+  static properties = {
+    el: {type: String},
+  };
+
   constructor() {
     super();
   }
@@ -35,7 +39,7 @@ export class CartIcon extends LitElement {
   }
 
   _onClick() {
-    window.MicroBus.emit('cart-sidebar-toggle');
+    window.MicroBus.emit('side-drawer-toggle', {el: this.el});
   }
 }
 
