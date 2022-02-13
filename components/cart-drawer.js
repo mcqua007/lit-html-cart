@@ -9,7 +9,7 @@ export class CartDrawer extends LitElement {
         height: 100%;
       }
 
-      .cart-slider {
+      .cart-drawer {
         display: flex;
         flex-direction: column;
         justify-content: space-between;
@@ -60,31 +60,31 @@ export class CartDrawer extends LitElement {
         margin-bottom: 6px;
       }
 
-      .cart-slider .cart-slider_top {
+      .cart-drawer .cart-drawer_top {
         border-bottom: 1px solid #eee;
         padding-bottom: 16px;
       }
 
-      .cart-slider header {
+      .cart-drawer header {
         display: flex;
         border-bottom: 1px solid #eee;
         padding: 0 16px 16px 16px;
         align-items: center;
       }
 
-      .cart-slider header h4 {
+      .cart-drawer header h4 {
         margin: 0 auto;
         text-align: center;
       }
 
-      .cart-slider .cart-slider_products {
+      .cart-drawer .cart-drawer_products {
         height: 100%;
         margin-top: 10px;
         overflow-y: auto;
         padding: 0 10px 10px 10px;
       }
 
-      .cart-slider_bottom {
+      .cart-drawer_bottom {
         height: 100%;
         max-height: 95px;
         display: flex;
@@ -216,15 +216,15 @@ export class CartDrawer extends LitElement {
   render() {
     return html`
       <side-drawer id="cart-drawer" position="right" .open=${this.open}>
-        <div class="cart-slider">
+        <div class="cart-drawer">
           <header>
             <h4>My Bag (<cart-count></cart-count> items)</h4>
             <button class="close-btn" @click=${this._toggle}>
               <img src="icons/times.svg" width="28" height="28" />
             </button>
           </header>
-          <div class="cart-slider_products">${this.buildCartItems()}</div>
-          <div class="cart-slider_bottom">
+          <div class="cart-drawer_products">${this.buildCartItems()}</div>
+          <div class="cart-drawer_bottom">
             <button class="checkout-btn">Checkout</button>
           </div>
         </div>
