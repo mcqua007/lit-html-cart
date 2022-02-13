@@ -48,6 +48,7 @@ export class SideDrawer extends LitElement {
   static properties = {
     hide: {type: Boolean},
     position: {type: String},
+    open: {type: Boolean},
   };
 
   constructor() {
@@ -55,15 +56,15 @@ export class SideDrawer extends LitElement {
     this.hide = true;
     this.child = null;
     this.position = this.position ? this.position : 'left';
-    window.MicroBus.on('side-drawer-toggle', (e) => {
-      this.child = e.detail.el;
-      this._toggleHide(e);
-    });
+    // window.MicroBus.on('side-drawer-toggle', (e) => {
+    //   this.child = e.detail.el;
+    //   this._toggleHide(e);
+    // });
   }
 
   render() {
     return html`
-      <div class="sidebar ${this.position}" aria-hidden=${this.hide}>
+      <div class="sidebar ${this.position}" aria-hidden=${!this.open}>
         <button class="close-btn" @click=${this._toggleHide}>
           <img src="icons/times.svg" width="28" height="28" />
         </button>

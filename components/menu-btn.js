@@ -17,7 +17,7 @@ export class MenuBtn extends LitElement {
 
   _onClick(e) {
     console.log(e, this.el);
-    window.MicroBus.emit('side-drawer-toggle', {el: this.el});
+    window.MicroBus.emit('menu-toggle', {el: this.el});
   }
   render() {
     return html`<button @click=${this._onClick}><slot></slot></button>`;

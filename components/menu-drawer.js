@@ -27,18 +27,44 @@ export class MenuDrawer extends LitElement {
     `,
   ];
 
+  static properties = {
+    open: {type: Boolean},
+  };
+
+  constructor() {
+    super();
+    this.open = false;
+  }
+
+  connectedCallback() {
+    super.connectedCallback();
+    window.MicroBus.on('menu-toggle', () => {
+      this.open = true;
+      console.log('1.MD open', this.open);
+    });
+  }
+
+  _hide() {
+    window.MicroBus.emit('menu-toggle');
+  }
+
   render() {
     return html`
-      <h4>Menu</h4>
-      <nav>
-        <ul>
-          <li>Home</li>
-          <li>Collection</li>
-          <li>About</li>
-          <li>Cart</li>
-          <li>Contact Us</li>
-        </ul>
-      </nav>
+      <side-drawer id="cart-drawer" position="left" .open=${this.open}>
+        <h4>Menu</h4>
+        <button class="close-btn" @click=${this._hide}>
+          <img src="icons/times.svg" width="28" height="28" />
+        </button>
+        <nav>
+          <ul>
+            <li>Home</li>
+            <li>Collection</li>
+            <li>About</li>
+            <li>Cart</li>
+            <li>Contact Us</li>
+          </ul>
+        </nav>
+      </side-drawer>
     `;
   }
 }

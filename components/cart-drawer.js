@@ -139,6 +139,7 @@ export class CartDrawer extends LitElement {
     product: {type: Object},
     cartItems: {type: Array},
     hide: {type: Boolean},
+    open: {type: Boolean},
   };
 
   constructor() {
@@ -146,6 +147,7 @@ export class CartDrawer extends LitElement {
     this.count = 0;
     this.hide = true;
     this.cartItems = [];
+    this.open = false;
 
     window.MicroBus.on('cart-change', async (e) => {
       console.log('event: ', e);
@@ -156,6 +158,13 @@ export class CartDrawer extends LitElement {
           window.MicroBus.emit('count-change', {count: this.count});
         });
       }
+    });
+  }
+
+  connectedCallback() {
+    super.connectedCallback();
+    window.MicroBus.on('cart-toggle', () => {
+      this.open = true;
     });
   }
 
@@ -206,18 +215,25 @@ export class CartDrawer extends LitElement {
   }
   render() {
     return html`
-      <div class="cart-slider" aria-hidden=${this.hide}>
-        <header>
-          <h4>My Bag (<cart-count></cart-count> items)</h4>
-        </header>
-        <div class="cart-slider_products">${this.buildCartItems()}</div>
-        <div class="cart-slider_bottom">
-          <button class="checkout-btn">Checkout</button>
+      <side-drawer id="cart-drawer" position="right" .open=${this.open}>
+        <div class="cart-slider">
+          <header>
+            <h4>My Bag (<cart-count></cart-count> items)</h4>
+            <button class="close-btn" @click=${this._hide}>
+              <img src="icons/times.svg" width="28" height="28" />
+            </button>
+          </header>
+          <div class="cart-slider_products">${this.buildCartItems()}</div>
+          <div class="cart-slider_bottom">
+            <button class="checkout-btn">Checkout</button>
+          </div>
         </div>
-      </div>
+      </side-drawer>
     `;
   }
-
+  _hide() {
+    this.open = false;
+  }
   _removeItem(id) {
     let index = this.cartItems.findIndex((el) => el.id == id);
     let arr = [...this.cartItems];
