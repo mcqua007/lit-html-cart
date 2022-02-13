@@ -1,6 +1,6 @@
 import {LitElement, html, css} from 'lit';
 
-export class CartIcon extends LitElement {
+export class CartIconBtn extends LitElement {
   static styles = [
     css`
       :host {
@@ -43,4 +43,4 @@ export class CartIcon extends LitElement {
   }
 }
 
-customElements.define('cart-icon', CartIcon);
+customElements.define('cart-icon-btn', CartIconBtn);
