@@ -85,9 +85,6 @@ export class CartDrawer extends LitElement {
       }
 
       .cart-drawer_bottom {
-        height: 100%;
-        max-height: 95px;
-        display: flex;
         padding: 0 10px;
         border-top: 1px solid rgb(238, 238, 238);
       }
@@ -148,13 +145,15 @@ export class CartDrawer extends LitElement {
     this.hide = true;
     this.cartItems = [];
     this.open = false;
+    this.subtotal = 0;
 
     window.MicroBus.on('cart-change', async (e) => {
-      console.log('event: ', e);
+      console.log(e);
       if (e.detail.id) {
         this.getProductData(e.detail.id).then((data) => {
           this.cartItems.push(data);
           this.count = this.count + 1;
+          this.calcSubtotal();
           window.MicroBus.emit('count-change', {count: this.count});
         });
       }
@@ -179,6 +178,7 @@ export class CartDrawer extends LitElement {
         });
     });
   }
+
   //build cart html
   buildCartItems() {
     if (this.count > 0 && this.cartItems) {
@@ -225,11 +225,24 @@ export class CartDrawer extends LitElement {
           </header>
           <div class="cart-drawer_products">${this.buildCartItems()}</div>
           <div class="cart-drawer_bottom">
+            <div class="flex _jc-space-between" style="margin-top: 10px;">
+              <div>Subtotal</div>
+              <div>$${this.subtotal.toFixed(2)}</div>
+            </div>
             <button class="checkout-btn">Checkout</button>
           </div>
         </div>
       </side-drawer>
     `;
+  }
+
+  calcSubtotal() {
+    var temp = 0;
+    this.cartItems.forEach((i) => {
+      temp += i.price;
+    });
+    console.log(this.subtotal, temp);
+    this.subtotal = temp;
   }
 
   _toggle() {
@@ -242,6 +255,7 @@ export class CartDrawer extends LitElement {
     arr.splice(index, 1);
     this.cartItems = arr;
     this.count = this.count - 1;
+    this.calcSubtotal();
     window.MicroBus.emit('count-change', {count: this.count});
   }
 }
