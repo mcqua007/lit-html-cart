@@ -5,28 +5,17 @@ export class CartDrawer extends LitElement {
   static get styles() {
     return css`
       :host {
+        width: 100%;
+        height: 100%;
       }
 
-      .cart-slider {
+      .cart-drawer {
         display: flex;
         flex-direction: column;
         justify-content: space-between;
-        max-width: 430px;
         width: 100%;
-        position: fixed;
-        right: 0;
-        top: 0;
-        background: #fff;
-        z-index: 2;
-        box-shadow: 1px 0px 20px -5px #bfbfbf;
         height: 100%;
         padding: 16px 0;
-        transform: translateX(105%);
-        transition: transform 0.35s ease-in-out;
-      }
-
-      .cart-slider[aria-hidden='false'] {
-        transform: none;
       }
 
       button {
@@ -71,34 +60,31 @@ export class CartDrawer extends LitElement {
         margin-bottom: 6px;
       }
 
-      .cart-slider .cart-slider_top {
+      .cart-drawer .cart-drawer_top {
         border-bottom: 1px solid #eee;
         padding-bottom: 16px;
       }
 
-      .cart-slider header {
+      .cart-drawer header {
         display: flex;
         border-bottom: 1px solid #eee;
         padding: 0 16px 16px 16px;
         align-items: center;
       }
 
-      .cart-slider header h4 {
+      .cart-drawer header h4 {
         margin: 0 auto;
         text-align: center;
       }
 
-      .cart-slider .cart-slider_products {
+      .cart-drawer .cart-drawer_products {
         height: 100%;
         margin-top: 10px;
         overflow-y: auto;
         padding: 0 10px 10px 10px;
       }
 
-      .cart-slider_bottom {
-        height: 100%;
-        max-height: 80px;
-        display: flex;
+      .cart-drawer_bottom {
         padding: 0 10px;
         border-top: 1px solid rgb(238, 238, 238);
       }
@@ -120,7 +106,7 @@ export class CartDrawer extends LitElement {
         border-radius: 5px;
       }
 
-      .close-cart-btn {
+      .close-btn {
         background: none;
         border: none;
         padding: 0;
@@ -150,6 +136,7 @@ export class CartDrawer extends LitElement {
     product: {type: Object},
     cartItems: {type: Array},
     hide: {type: Boolean},
+    open: {type: Boolean},
   };
 
   constructor() {
@@ -157,22 +144,26 @@ export class CartDrawer extends LitElement {
     this.count = 0;
     this.hide = true;
     this.cartItems = [];
+    this.open = false;
+    this.subtotal = 0;
 
     window.MicroBus.on('cart-change', async (e) => {
-      console.log('event: ', e);
+      console.log(e);
       if (e.detail.id) {
         this.getProductData(e.detail.id).then((data) => {
           this.cartItems.push(data);
           this.count = this.count + 1;
+          this.calcSubtotal();
           window.MicroBus.emit('count-change', {count: this.count});
-          window.MicroBus.emit('cart-sidebar-toggle');
         });
       }
     });
+  }
 
-    window.MicroBus.on('cart-sidebar-toggle', () => {
-      this.hide = !this.hide;
-      window.MicroBus.emit('body-overlay-toggle');
+  connectedCallback() {
+    super.connectedCallback();
+    window.MicroBus.on('cart-toggle', () => {
+      this._toggle();
     });
   }
 
@@ -187,6 +178,7 @@ export class CartDrawer extends LitElement {
         });
     });
   }
+
   //build cart html
   buildCartItems() {
     if (this.count > 0 && this.cartItems) {
@@ -223,19 +215,38 @@ export class CartDrawer extends LitElement {
   }
   render() {
     return html`
-      <div class="cart-slider" aria-hidden=${this.hide}>
-        <header>
-          <h4>My Bag (<cart-count></cart-count> items)</h4>
-          <button class="close-cart-btn" @click=${this._closeCart}>
-            <img src="icons/times.svg" width="28" height="28" />
-          </button>
-        </header>
-        <div class="cart-slider_products">${this.buildCartItems()}</div>
-        <div class="cart-slider_bottom">
-          <button class="checkout-btn">Checkout</button>
+      <side-drawer id="cart-drawer" position="right" .open=${this.open}>
+        <div class="cart-drawer">
+          <header>
+            <h4>My Bag (<cart-count></cart-count> items)</h4>
+            <button class="close-btn" @click=${this._toggle}>
+              <img src="icons/times.svg" width="28" height="28" />
+            </button>
+          </header>
+          <div class="cart-drawer_products">${this.buildCartItems()}</div>
+          <div class="cart-drawer_bottom">
+            <div class="flex _jc-space-between" style="margin-top: 10px;">
+              <div>Subtotal</div>
+              <div>$${this.subtotal.toFixed(2)}</div>
+            </div>
+            <button class="checkout-btn">Checkout</button>
+          </div>
         </div>
-      </div>
+      </side-drawer>
     `;
+  }
+
+  calcSubtotal() {
+    var temp = 0;
+    this.cartItems.forEach((i) => {
+      temp += i.price;
+    });
+    console.log(this.subtotal, temp);
+    this.subtotal = temp;
+  }
+
+  _toggle() {
+    this.open = !this.open;
   }
 
   _removeItem(id) {
@@ -244,11 +255,8 @@ export class CartDrawer extends LitElement {
     arr.splice(index, 1);
     this.cartItems = arr;
     this.count = this.count - 1;
+    this.calcSubtotal();
     window.MicroBus.emit('count-change', {count: this.count});
-  }
-
-  _closeCart() {
-    window.MicroBus.emit('cart-sidebar-toggle');
   }
 }
 
