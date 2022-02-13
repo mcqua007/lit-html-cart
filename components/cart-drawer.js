@@ -109,7 +109,7 @@ export class CartDrawer extends LitElement {
         border-radius: 5px;
       }
 
-      .close-cart-btn {
+      .close-btn {
         background: none;
         border: none;
         padding: 0;
@@ -164,7 +164,7 @@ export class CartDrawer extends LitElement {
   connectedCallback() {
     super.connectedCallback();
     window.MicroBus.on('cart-toggle', () => {
-      this.open = true;
+      this._toggle();
     });
   }
 
@@ -219,7 +219,7 @@ export class CartDrawer extends LitElement {
         <div class="cart-slider">
           <header>
             <h4>My Bag (<cart-count></cart-count> items)</h4>
-            <button class="close-btn" @click=${this._hide}>
+            <button class="close-btn" @click=${this._toggle}>
               <img src="icons/times.svg" width="28" height="28" />
             </button>
           </header>
@@ -231,9 +231,11 @@ export class CartDrawer extends LitElement {
       </side-drawer>
     `;
   }
-  _hide() {
-    this.open = false;
+
+  _toggle() {
+    this.open = !this.open;
   }
+
   _removeItem(id) {
     let index = this.cartItems.findIndex((el) => el.id == id);
     let arr = [...this.cartItems];

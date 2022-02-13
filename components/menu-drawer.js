@@ -7,7 +7,14 @@ export class MenuDrawer extends LitElement {
       }
 
       h4 {
-        text-align: center;
+        margin: 0 auto;
+      }
+
+      header {
+        padding: 10px 16px 16px 16px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
       }
 
       nav > ul {
@@ -24,6 +31,13 @@ export class MenuDrawer extends LitElement {
       li:last-child {
         border-bottom: 1px solid #ccc;
       }
+
+      button.close-btn {
+        background: none;
+        border: none;
+        padding: 0;
+        cursor: pointer;
+      }
     `,
   ];
 
@@ -39,31 +53,34 @@ export class MenuDrawer extends LitElement {
   connectedCallback() {
     super.connectedCallback();
     window.MicroBus.on('menu-toggle', () => {
-      this.open = true;
-      console.log('1.MD open', this.open);
+      this._toggle();
     });
   }
 
-  _hide() {
-    window.MicroBus.emit('menu-toggle');
+  _toggle() {
+    this.open = !this.open;
   }
 
   render() {
     return html`
       <side-drawer id="cart-drawer" position="left" .open=${this.open}>
-        <h4>Menu</h4>
-        <button class="close-btn" @click=${this._hide}>
-          <img src="icons/times.svg" width="28" height="28" />
-        </button>
-        <nav>
-          <ul>
-            <li>Home</li>
-            <li>Collection</li>
-            <li>About</li>
-            <li>Cart</li>
-            <li>Contact Us</li>
-          </ul>
-        </nav>
+        <div class="menu-drawer">
+          <header>
+            <h4>Menu</h4>
+            <button class="close-btn" @click=${this._toggle}>
+              <img src="icons/times.svg" width="28" height="28" />
+            </button>
+          </header>
+          <nav>
+            <ul>
+              <li>Home</li>
+              <li>Collection</li>
+              <li>About</li>
+              <li>Cart</li>
+              <li>Contact Us</li>
+            </ul>
+          </nav>
+        </div>
       </side-drawer>
     `;
   }

@@ -32,7 +32,7 @@ export class SideDrawer extends LitElement {
       .sidebar[aria-hidden='false'] {
         transform: none;
       }
-      button.close-btn {
+      /* button.close-btn {
         background: none;
         border: none;
         cursor: pointer;
@@ -41,7 +41,7 @@ export class SideDrawer extends LitElement {
         right: 0;
         top: 0;
         padding: 10px;
-      }
+      } */
     `,
   ];
 
@@ -65,9 +65,9 @@ export class SideDrawer extends LitElement {
   render() {
     return html`
       <div class="sidebar ${this.position}" aria-hidden=${!this.open}>
-        <button class="close-btn" @click=${this._toggleHide}>
+        <!-- <button class="close-btn" @click=${this._toggleHide}>
           <img src="icons/times.svg" width="28" height="28" />
-        </button>
+        </button> -->
         ${this._renderChild()}
       </div>
     `;
