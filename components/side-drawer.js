@@ -57,6 +57,7 @@ export class SideDrawer extends LitElement {
     this.position = this.position ? this.position : 'left';
     window.MicroBus.on('side-drawer-toggle', (e) => {
       this.child = e.detail.el;
+      this.position = e.detail.pos;
       this._toggleHide(e);
     });
   }
